@@ -10,8 +10,9 @@ export interface VuiCoreComponentProps{
     children? :  string | JSX.Element | JSX.Element[] 
     onClick? : () => void
     style? : VuiThemeStyle
+    title? : string
 }
-export function ViuCoreComponent({ base, hover, tagName = "div", children, onClick, style} : VuiCoreComponentProps){
+export function ViuCoreComponent({ base, hover, tagName = "div", children, onClick, style, title} : VuiCoreComponentProps){
     
 
     const {_hover, ...restStyle} = style || {};
@@ -28,7 +29,7 @@ export function ViuCoreComponent({ base, hover, tagName = "div", children, onCli
     const baseStyleCSS = styleToCss(baseStyle)
     const hoverStyleCSS = styleToCss(hoverStyle || {})
     
-    return <VuiCoreComponentElement baseStyle={baseStyleCSS} hoverStyle={hoverStyleCSS} onClick={onClick}>{children}</VuiCoreComponentElement>
+    return <VuiCoreComponentElement baseStyle={baseStyleCSS} hoverStyle={hoverStyleCSS} onClick={onClick} title={title}>{children}</VuiCoreComponentElement>
 
 }
 

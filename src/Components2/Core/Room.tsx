@@ -10,7 +10,48 @@ interface RoomCtx {
   refreshParticipants: () => void;
   setFocusView: (participantId: string, videoSource: videoSource) => void;
   focusView?: focusViewData | null;
+  connected? : boolean
 }
+
+
+export function useScreenshare() {
+  const context = useContext(RoomContext);
+  
+  const [enabled, setEnabled] = useState<boolean>(context?.room?.localParticipant.isScreenShareEnabled || false)
+
+  useEffect(()=>{
+        setEnabled(context?.room?.localParticipant.isScreenShareEnabled || false);
+  }, [context?.room?.localParticipant.isScreenShareEnabled])
+  
+  context?.room?.localParticipant.on(ParticipantEvent.LocalTrackPublished, (track)=>{
+    setEnabled(context?.room?.localParticipant.isScreenShareEnabled || false)
+  })
+  context?.room?.localParticipant.on(ParticipantEvent.LocalTrackUnpublished, (track)=>{
+    setEnabled(context?.room?.localParticipant.isScreenShareEnabled || false)
+  })
+
+  if (!context) {
+    return {
+      isEnabled: undefined,
+    };
+  }
+
+
+  return {
+    isEnabled:  enabled,
+    enable: () => {
+      context.room?.localParticipant.setScreenShareEnabled(true);
+      setEnabled(true)
+    },
+    disable: () => {
+      context.room?.localParticipant.setScreenShareEnabled(false);
+      setEnabled(false)
+    },
+  };
+}
+
+
+
 
 export function useMicrophone() {
   const context = useContext(RoomContext);
@@ -23,11 +64,11 @@ export function useMicrophone() {
 
 
   
-  context?.room?.localParticipant.on(ParticipantEvent.TrackMuted, ()=>{
-    setEnabled(false)
+  context?.room?.localParticipant.on(ParticipantEvent.TrackMuted, (track)=>{
+    setEnabled(context?.room?.localParticipant.isMicrophoneEnabled || false)
   })
-  context?.room?.localParticipant.on(ParticipantEvent.TrackUnmuted, ()=>{
-    setEnabled(true)
+  context?.room?.localParticipant.on(ParticipantEvent.TrackUnmuted, (track)=>{
+    setEnabled(context?.room?.localParticipant.isMicrophoneEnabled || false)
   })   
 
   if (!context) {
@@ -45,6 +86,46 @@ export function useMicrophone() {
     },
     disable: () => {
       context.room?.localParticipant.setMicrophoneEnabled(false);
+      setEnabled(false)
+    },
+  };
+}
+
+
+
+export function useCamera() {
+  const context = useContext(RoomContext);
+  
+  const [enabled, setEnabled] = useState<boolean>(context?.room?.localParticipant.isCameraEnabled || false)
+
+  useEffect(()=>{
+        setEnabled(context?.room?.localParticipant.isCameraEnabled || false);
+  }, [context?.room?.localParticipant.isCameraEnabled])
+
+
+  
+  context?.room?.localParticipant.on(ParticipantEvent.TrackMuted, (track)=>{
+    setEnabled(context?.room?.localParticipant.isCameraEnabled || false)
+  })
+  context?.room?.localParticipant.on(ParticipantEvent.TrackUnmuted, (track)=>{
+    setEnabled(context?.room?.localParticipant.isCameraEnabled || false)
+  }) 
+
+  if (!context) {
+    return {
+      isEnabled: undefined,
+    };
+  }
+
+
+  return {
+    isEnabled:  enabled,
+    enable: () => {
+      context.room?.localParticipant.setCameraEnabled(true);
+      setEnabled(true)
+    },
+    disable: () => {
+      context.room?.localParticipant.setCameraEnabled(false);
       setEnabled(false)
     },
   };
@@ -83,6 +164,8 @@ function RoomComponent({ children }: { children?: ReactElement }) {
 
   const [focusViewData, setFocusViewData] = useState<focusViewData | null>(null);
 
+  const [connected, setConnected] = useState<boolean>(false);
+
   useEffect(() => {
     setRoom(new Room(options));
   }, [options]);
@@ -91,7 +174,9 @@ function RoomComponent({ children }: { children?: ReactElement }) {
     if (!room) return;
     const onSignalConnected = () => {
       const localP = room.localParticipant;
+      
       try {
+        setConnected(true);
         //localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
         //localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
         //localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
@@ -116,6 +201,11 @@ function RoomComponent({ children }: { children?: ReactElement }) {
       //           break;
     };
 
+    const onDisconnected = () => {
+      console.log("Room disconnected")
+      setConnected(false);
+    }
+
     const onParticipantConnected = (participant: Participant) => {
       setParticipants(Array.from(room.participants, (item) => item[1]));
     };
@@ -128,11 +218,13 @@ function RoomComponent({ children }: { children?: ReactElement }) {
     room.on(RoomEvent.ConnectionStateChanged, onConnectionStateChanged);
     room.on(RoomEvent.ParticipantConnected, onParticipantConnected);
     room.on(RoomEvent.ParticipantDisconnected, onParticipantDisconnected);
+    room.on(RoomEvent.Disconnected, onDisconnected)
     return () => {
       room.off(RoomEvent.SignalConnected, onSignalConnected);
       room.off(RoomEvent.ConnectionStateChanged, onConnectionStateChanged);
       room.off(RoomEvent.ParticipantConnected, onParticipantConnected);
       room.off(RoomEvent.ParticipantDisconnected, onParticipantDisconnected);
+      room.off(RoomEvent.Disconnected, onDisconnected)
     };
   }, [room]);
 
@@ -177,11 +269,11 @@ function RoomComponent({ children }: { children?: ReactElement }) {
     };
   }, []);
 
-  console.log("Children", children);
+  console.log("connected", connected)
   return (
     <>
       {room && (
-        <RoomContext.Provider value={{ room, participants, refreshParticipants, setFocusView, focusView: focusViewData }}>
+        <RoomContext.Provider value={{ room, participants, refreshParticipants, setFocusView, focusView: focusViewData, connected }}>
           <>
             <AudioTracksManager></AudioTracksManager>
             {children}

@@ -6,7 +6,11 @@ import { CSSProperties } from "styled-components";
 export interface VuiThemeSettings  {
     colors : {
         positive : string;
+        positiveInverse : string;
         negative : string;
+        negativeInverse : string;
+        main : string;
+        mainInverse : string;
         [key : string] : string;
     },
     variables : {
@@ -15,6 +19,7 @@ export interface VuiThemeSettings  {
 
     components : {
         button : VuiThemeComponentSetting
+        toolbar : VuiThemeComponentSetting
     }    
 
 }
@@ -35,10 +40,12 @@ export interface VuiThemeStyle extends CSSProperties{
 
 const VuiDefaultTheme : VuiThemeSettings = generateTheme({
     colors : {
-        positive : "#0f0",
-        negative : "#f00",
-        main : "#f00",
-        mainForground : "#fff"
+        positive : "#00b894",
+        positiveInverse : "#fff",
+        negative : "#d63031",
+        negativeInverse : "#fff",
+        main : "#0984e3",
+        mainInverse : "#fff"
     },
     variables : {
 
@@ -65,6 +72,14 @@ const VuiDefaultTheme : VuiThemeSettings = generateTheme({
                 }
             }
         },
+        toolbar : {
+            backgroundColor : "#00000088",
+            borderRadius : "50px",
+            padding : "20px",
+            display: "flex",
+            gap : "20px"
+
+        }
     }
 })
 
