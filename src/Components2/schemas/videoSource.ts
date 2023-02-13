@@ -1,0 +1,1 @@
+export type videoSource = "camera" | "screen_share"

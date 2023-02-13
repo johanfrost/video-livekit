@@ -1,59 +1,48 @@
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+Primary domain name (i.e. livekit.myhost.com): lk.aquro.com
+TURN domain name (i.e. livekit-turn.myhost.com): lk-turn.aquro.com
+✔ latest
+✔ no - (we'll bundle Redis)
+✔ Startup Shell Script
+Your production config files are generated in directory: lk.aquro.com
 
-## Available Scripts
+Please point DNS for lk.aquro.com and lk-turn.aquro.com to the IP address of your server.
+Once started, Caddy will automatically acquire TLS certificates for the domains.
 
-In the project directory, you can run:
+The file "init_script.sh" is a script that can be used in the "user-data" field when starting a new VM.
 
-### `npm start`
+Please ensure the following ports are accessible on the server
+ * 443 - primary HTTPS and TURN/TLS
+ * 80 - for TLS issuance
+ * 7881 - for WebRTC over TCP
+ * 443/UDP - for TURN/UDP
+ * 50000-60000/UDP - for WebRTC over UDP
 
-Runs the app in the development mode.<br /> Open
-[http://localhost:3000](http://localhost:3000) to view it in the browser.
+Server URL: wss://lk.aquro.com
+API Key: APIbnHcNfdu48RA
+API Secret: SWK1agqopSOSxNHwHERMa7F2bl8WEwCepCboW8u13WX
 
-The page will reload if you make edits.<br /> You will also see any lint errors
-in the console.
+Here's a test token generated with your keys: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTE4NDg3NTUsImlzcyI6IkFQSWJuSGNOZmR1NDhSQSIsImp0aSI6InRvbnlfc3RhcmsiLCJuYW1lIjoiVG9ueSBTdGFyayIsIm5iZiI6MTY3NTg0ODc1NSwic3ViIjoidG9ueV9zdGFyayIsInZpZGVvIjp7InJvb20iOiJzdGFyay10b3dlciIsInJvb21Kb2luIjp0cnVlfX0.l-AY2l2oIRThwI-7n-av9QVbvHup4I7S0U2FkpBOOTE
 
-### `npm test`
+An access token identifies the participant as well as the room it's connecting to
 
-Launches the test runner in the interactive watch mode.<br /> See the section
-about
-[running tests](https://facebook.github.io/create-react-app/docs/running-tests)
-for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.<br /> It correctly bundles
-React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br /> Your app is
-ready to be deployed!
 
-See the section about
-[deployment](https://facebook.github.io/create-react-app/docs/deployment) for
-more information.
+livekit-cli create-token \
+    --api-key APIbnHcNfdu48RA --api-secret SWK1agqopSOSxNHwHERMa7F2bl8WEwCepCboW8u13WX \
+    --join --room my-first-room --identity user1 \
+    --valid-for 100h
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can
-`eject` at any time. This command will remove the single build dependency from
-your project.
+user1:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzYzMzI4MjcsImlzcyI6IkFQSWJuSGNOZmR1NDhSQSIsIm5hbWUiOiJ1c2VyMSIsIm5iZiI6MTY3NTk3MjgyNywic3ViIjoidXNlcjEiLCJ2aWRlbyI6eyJyb29tIjoibXktZmlyc3Qtcm9vbSIsInJvb21Kb2luIjp0cnVlfX0.2Hz79HrJ9tzx1vprEDQIHPfJ7DO2Qp19Ikj_dfbZYKM
 
-Instead, it will copy all the configuration files and the transitive
-dependencies (webpack, Babel, ESLint, etc) right into your project so you have
-full control over them. All of the commands except `eject` will still work, but
-they will point to the copied scripts so you can tweak them. At this point
-you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for
-small and middle deployments, and you shouldn’t feel obligated to use this
-feature. However we understand that this tool wouldn’t be useful if you couldn’t
-customize it when you are ready for it.
+user2:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzYzMzI4NDksImlzcyI6IkFQSWJuSGNOZmR1NDhSQSIsIm5hbWUiOiJ1c2VyMiIsIm5iZiI6MTY3NTk3Mjg0OSwic3ViIjoidXNlcjIiLCJ2aWRlbyI6eyJyb29tIjoibXktZmlyc3Qtcm9vbSIsInJvb21Kb2luIjp0cnVlfX0.mlTAsbCyC-PvyAsxzzb6ft7lMpKRHsgqlOZWiR8TXiQ
 
-## Learn More
 
-You can learn more in the
-[Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+user3: 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzYzMzI4NjIsImlzcyI6IkFQSWJuSGNOZmR1NDhSQSIsIm5hbWUiOiJ1c2VyMyIsIm5iZiI6MTY3NTk3Mjg2Miwic3ViIjoidXNlcjMiLCJ2aWRlbyI6eyJyb29tIjoibXktZmlyc3Qtcm9vbSIsInJvb21Kb2luIjp0cnVlfX0.p4C0ttqOm1EpMWfPZGjTcHH4hMRXUEOo7138OChkays
