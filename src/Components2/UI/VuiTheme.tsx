@@ -1,4 +1,5 @@
 
+import { position } from "@chakra-ui/react";
 import { createContext, ReactElement, useContext } from "react";
 import { CSSProperties } from "styled-components";
 
@@ -20,6 +21,8 @@ export interface VuiThemeSettings  {
     components : {
         button : VuiThemeComponentSetting
         toolbar : VuiThemeComponentSetting
+        mirror : VuiThemeComponentSetting
+        multiView : VuiThemeComponentSetting
     }    
 
 }
@@ -50,6 +53,7 @@ const VuiDefaultTheme : VuiThemeSettings = generateTheme({
     variables : {
 
     },
+
     components : {
         button : {
             borderRadius : "50%",
@@ -79,9 +83,52 @@ const VuiDefaultTheme : VuiThemeSettings = generateTheme({
             display: "flex",
             gap : "20px"
 
-        }
+        },
+        mirror : {
+            width : "300px",
+            borderRadius : "4px",
+            overflow : "hidden",
+            
+        },     
+        multiView : {
+            _variants : {
+                container : {
+                    position : "relative",
+                },
+                primaryContainer : {
+                    backgroundColor : "#00000088",
+                },
+                secondadyContainer : {
+                    width: "80px",
+                    height : "80px",
+                    position: "absolute",
+                    right: "10px",
+                    bottom: "10px",
+                    borderRadius: "50%", 
+                    boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;",
+                    cursor: "pointer",
+                    overflow: "hidden",
+                    backgroundColor : "#00000088",
+                },
+                primaryVideo : {
+                    
+           
+                },
+                secondaryVideo : {
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    
+                }
+
+            }
+        } 
+         
     }
 })
+
+
+
 
 const VuiThemeContext = createContext<VuiThemeSettings>(VuiDefaultTheme)
 

@@ -11,6 +11,7 @@ import { VuiScreenshareToggleButton } from "./Components2/UI/VuiScreenshareToggl
 import { VuiHangupButton } from "./Components2/UI/VuiHangupButton";
 import { VuiConnected, VuiDisconnected } from "./Components2/UI/VuiConnected";
 import { VuiToolbar } from "./Components2/UI/VuiToolbar";
+import { VuiMirror } from "./Components2/UI/VuiMirror";
 
 
 
@@ -19,18 +20,38 @@ export const App = () => (
   <ChakraProvider theme={theme}>
     <Room>
       <>
-      <SimpleCall></SimpleCall>
+      {/* <SimpleCall></SimpleCall> */}
 
-      <div style={{ position : "fixed", "top" : "10px",  "zIndex" : 1000}}>
+      <div style={{position : "fixed", bottom : "20px", left : "50%", transform : "translateX(-50%)", zIndex : 1000}}>
         
         <VuiConnected>
-          <VuiToolbar style={{position : "fixed", bottom : "20px", left : "50%", transform : "translateX(-50%)"}}></VuiToolbar>
+          <VuiToolbar ></VuiToolbar>
         </VuiConnected>
         <VuiDisconnected>
           Call is disconnected
         </VuiDisconnected>
 
       </div>
+
+
+      <div style={{ position : "fixed", "top" : "10px", right : "10px"}}>
+        <VuiMirror mode="multiview"></VuiMirror>
+      </div>
+
+      <FocusView>
+      <>
+      
+      <SourceVideo style={{
+    height: "100%",
+    objectFit: "cover"
+
+      }}></SourceVideo>
+
+      </>
+    </FocusView>
+
+
+
       </>
 
       {/* <>
@@ -60,17 +81,7 @@ const SimpleCall = () => {
         <SourceVideo></SourceVideo>
       </LocalView>
     </div>
-    <FocusView>
-      <>
-      
-      <SourceVideo style={{
-    height: "100%",
-    objectFit: "cover"
-
-      }}></SourceVideo>
-
-      </>
-    </FocusView>    
+    
   </div>
 }
 

@@ -150,8 +150,11 @@ export function useParticipants() {
 
 export function useFocusView() {
   const context = useContext(RoomContext);
-  if (!context) return null;
-  return context.focusView;
+  if (!context) return undefined;
+  return {
+    focusView : context.focusView!,
+    setFocusView : context.setFocusView
+  }
 }
 
 const RoomContext = createContext<RoomCtx | null>(null);
@@ -253,7 +256,7 @@ function RoomComponent({ children }: { children?: ReactElement }) {
     room
       .connect(
         "wss://lk.aquro.com",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzYzMzI4MjcsImlzcyI6IkFQSWJuSGNOZmR1NDhSQSIsIm5hbWUiOiJ1c2VyMSIsIm5iZiI6MTY3NTk3MjgyNywic3ViIjoidXNlcjEiLCJ2aWRlbyI6eyJyb29tIjoibXktZmlyc3Qtcm9vbSIsInJvb21Kb2luIjp0cnVlfX0.2Hz79HrJ9tzx1vprEDQIHPfJ7DO2Qp19Ikj_dfbZYKM",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzY3NDc0MTcsImlzcyI6IkFQSWJuSGNOZmR1NDhSQSIsIm5hbWUiOiJ1c2VyMSIsIm5iZiI6MTY3NjM4NzQxNywic3ViIjoidXNlcjEiLCJ2aWRlbyI6eyJyb29tIjoibXktZmlyc3Qtcm9vbSIsInJvb21Kb2luIjp0cnVlfX0.yDt3RNoNxd8pS-WY5aXO3wTWiQuXze4P0zkWWKKSWNU",
         connectOptions
       )
       .catch((e) => {
