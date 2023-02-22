@@ -23,6 +23,11 @@ export interface VuiThemeSettings  {
         toolbar : VuiThemeComponentSetting
         mirror : VuiThemeComponentSetting
         multiView : VuiThemeComponentSetting
+        participantGrid : VuiThemeComponentSetting
+        participantCard : VuiThemeComponentSetting
+        focusCard : VuiThemeComponentSetting
+        
+    
     }    
 
 }
@@ -99,15 +104,16 @@ const VuiDefaultTheme : VuiThemeSettings = generateTheme({
                     backgroundColor : "#00000088",
                 },
                 secondadyContainer : {
-                    width: "80px",
+                    //width: "80px",
                     height : "80px",
+                    maxHeight : "33%",
                     position: "absolute",
-                    right: "10px",
-                    bottom: "10px",
-                    borderRadius: "50%", 
-                    boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;",
+                    right: "0px",
+                    bottom: "0px",
+                    //borderRadius: "50%", 
+                    //boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;",
                     cursor: "pointer",
-                    overflow: "hidden",
+                    //overflow: "hidden",
                     backgroundColor : "#00000088",
                 },
                 primaryVideo : {
@@ -122,7 +128,61 @@ const VuiDefaultTheme : VuiThemeSettings = generateTheme({
                 }
 
             }
-        } 
+        },
+        participantGrid : {
+            _variants : {
+                container : {
+                    display : "flex",
+                    flexWrap : "wrap",
+                    height : "100%",
+                    alignItems : "center",
+                    justifyContent : "center"
+                },
+                cell : {
+                    padding : "10px",
+                    display : "flex",
+                    alignItems : "center",
+                    justifyContent : "center"
+                    
+                },
+                item : {
+                    width : "100%",
+                    height : "100%",
+                    backgroundColor : "#efefef88",
+                    borderRadius : "4px",
+                    padding: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position : "relative"
+
+
+                }
+            }
+        },
+        participantCard : {
+            _variants : {
+                name : {
+                    position : "absolute",
+                    bottom : "20px",
+                    left : "20px",
+                    color: "#fff",
+                    textShadow: "0px 0px 7px #000000"
+
+                },
+                video : {
+                    borderRadius : "4px",
+                    overflow : "hidden"
+                }
+            }
+        },
+        focusCard : {
+            height:"100%",
+            width:"100%",
+            _variants : {
+
+            }
+        }
          
     }
 })

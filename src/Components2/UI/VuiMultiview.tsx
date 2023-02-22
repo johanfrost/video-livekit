@@ -142,7 +142,7 @@ export interface VuiMultiviewProps {
           </ParticipantManager>
         </ViuCoreComponent>
         {secondarySource !== "" ? (
-          <ViuCoreComponent base={secondaryContainerThemeNode} hover={secondaryContainerThemeNode._hover} style={primaryContainerStyle} onClick={secondaryClicked}>
+          <ViuCoreComponent base={secondaryContainerThemeNode} hover={secondaryContainerThemeNode._hover} style={secondaryContainerStyle} onClick={secondaryClicked}>
             <ParticipantManager participant={participant} videoSource={secondarySource}>
               <SourceVideo style={secondaryVideoCompiledStyle}></SourceVideo>
             </ParticipantManager>

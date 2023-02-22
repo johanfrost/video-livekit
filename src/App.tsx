@@ -1,27 +1,49 @@
-import { Box, ChakraProvider, Flex, HStack, theme } from "@chakra-ui/react";
+import { Button, ChakraProvider, Input, theme, VStack } from "@chakra-ui/react";
 import "./App.css";
-import { SourceVideo } from "./Components2/Core/SourceVideo";
-import { Room } from "./Components2/Core/Room";
-import { SourceList } from "./Components2/Core/SourceList";
-import { FocusView } from "./Components2/Core/FocusView";
 import { LocalView } from "./Components2/Core/LocalView";
-import { VuiMicrophoneToggleButton } from "./Components2/UI/VuiMicrophoneToggleButton";
-import { VuiCameraToggleButton } from "./Components2/UI/VuiCameraToggleButton";
-import { VuiScreenshareToggleButton } from "./Components2/UI/VuiScreenshareToggleButton";
-import { VuiHangupButton } from "./Components2/UI/VuiHangupButton";
+import { Room } from "./Components2/Core/Room";
+import { SourceVideo } from "./Components2/Core/SourceVideo";
 import { VuiConnected, VuiDisconnected } from "./Components2/UI/VuiConnected";
 import { VuiToolbar } from "./Components2/UI/VuiToolbar";
+
+import { useState } from "react";
+import { VuiFocusCard } from "./Components2/UI/VuiFocusCard";
+import { VuiParticipantGrid } from "./Components2/UI/VuiParticipantGrid";
 import { VuiMirror } from "./Components2/UI/VuiMirror";
 
 
 
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Room>
-      <>
-      {/* <SimpleCall></SimpleCall> */}
 
+
+
+
+export const App = () => {
+
+  const [viewMode, setViewMode] = useState<"grid" | "focus">("grid");
+  const [token, setToken] = useState<string>("");
+
+  return <ChakraProvider theme={theme}>
+
+    {token ? <Room token={token} url="wss://lk.aquro.com">
+      <>
+      {viewMode ===  "grid" && <div style={{height: "100vh"}}>
+        <VuiParticipantGrid sizeMode="cover" includeSelf={false} includeScreenshare={false} mode="multiview" screenshareSizeMode="contain" clickToSwitcFocusview={true} onClick={()=>{
+          setViewMode("focus");
+        }} ></VuiParticipantGrid>
+      </div>
+      }
+      {viewMode ===  "focus" && <div style={{height: "100vh"}}>
+        <VuiFocusCard sizeMode="cover" screenShareSizeMode="contain" mode="multiview" onClick={()=>{
+          setViewMode("grid");
+        }}></VuiFocusCard>
+      </div>
+      }
+      <div style={{position : "fixed", right : "10px", top : "10px" }} >
+        <VuiMirror mode="multiview" ></VuiMirror>
+      </div>
+      
+      
       <div style={{position : "fixed", bottom : "20px", left : "50%", transform : "translateX(-50%)", zIndex : 1000}}>
         
         <VuiConnected>
@@ -33,46 +55,26 @@ export const App = () => (
 
       </div>
 
-
-      <div style={{ position : "fixed", "top" : "10px", right : "10px"}}>
-        <VuiMirror mode="multiview"></VuiMirror>
-      </div>
-
-      <FocusView>
-      <>
-      
-      <SourceVideo style={{
-    height: "100%",
-    objectFit: "cover"
-
-      }}></SourceVideo>
-
-      </>
-    </FocusView>
-
-
-
       </>
 
-      {/* <>
-      <LocalView>
-        <SourceVideo></SourceVideo>
-      </LocalView>
-      <FocusView>
-        <SourceVideo></SourceVideo>
-      </FocusView>
-      <SourceList videoSources={["camera", "screen_share"]}>
-        <Box>
-          <Box>aaa</Box>
-          <SourceVideo></SourceVideo>
-        </Box>
-      </SourceList>
-      </> */}
-    </Room>
+     
+    </Room> :<ShowToken updateToken={setToken}></ShowToken> }
     
   </ChakraProvider>
-);
+}
 
+
+const ShowToken = ({updateToken} : { updateToken : (token : string)=>void}) => {
+  const [token, setToken] = useState<string>("");
+
+  return <VStack>
+    <Input value={token} onChange={(ev)=>setToken(ev.currentTarget.value)} placeholder="Token"/>
+    <Button onClick={()=>{
+      updateToken(token)
+    }}>Set token</Button>
+  </VStack>
+
+}
 
 const SimpleCall = () => {
   return <div style={{ position : "fixed", left : "0px", top : "0px", right : "0px", bottom : "0px", backgroundColor : "#000"}}>

@@ -159,7 +159,13 @@ export function useFocusView() {
 
 const RoomContext = createContext<RoomCtx | null>(null);
 
-function RoomComponent({ children }: { children?: ReactElement }) {
+
+interface RoomComponentProps {
+  children?: ReactElement,
+  token : string;
+  url : string;
+}
+function RoomComponent({ children, token, url }: RoomComponentProps) {
   const options: RoomOptions = useMemo(() => ({}), []);
   const connectOptions: RoomConnectOptions = useMemo(() => ({}), []);
 
@@ -255,8 +261,8 @@ function RoomComponent({ children }: { children?: ReactElement }) {
 
     room
       .connect(
-        "wss://lk.aquro.com",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzY3NDc0MTcsImlzcyI6IkFQSWJuSGNOZmR1NDhSQSIsIm5hbWUiOiJ1c2VyMSIsIm5iZiI6MTY3NjM4NzQxNywic3ViIjoidXNlcjEiLCJ2aWRlbyI6eyJyb29tIjoibXktZmlyc3Qtcm9vbSIsInJvb21Kb2luIjp0cnVlfX0.yDt3RNoNxd8pS-WY5aXO3wTWiQuXze4P0zkWWKKSWNU",
+        url,
+        token,
         connectOptions
       )
       .catch((e) => {
